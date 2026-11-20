@@ -1,0 +1,26 @@
+name: Merge group CI
+on:
+  merge_group:
+    types: [checks_requested]
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+      - name: Verify merge queue identity
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          EVENT_SHA: ${{ github.sha }}
+          EVENT_REF: ${{ github.ref }}
+          EXPECTED_SHA: ${{ vars.EXPECTED_MERGE_GROUP_SHA }}
+        run: |
+          test "$EVENT_NAME" = merge_group
+          test "$EVENT_ACTION" = checks_requested
+          test "$EVENT_SHA" = "${EXPECTED_SHA:?missing expected SHA}"
+          test "$EVENT_REF" = refs/heads/gh-readonly-queue/main/pr-379-4b8f48e791d8d103b19252f283ae0fbaab3ace36

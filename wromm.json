@@ -1,0 +1,12 @@
+{
+  "name": "merge-group-replay",
+  "runtimes": [],
+  "system_packages": ["git", "curl", "bash", "ca-certificates"],
+  "services": [],
+  "ports": [],
+  "env": {},
+  "agent": "codex",
+  "source": {
+    "type": "Manual"
+  }
+}
